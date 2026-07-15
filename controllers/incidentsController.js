@@ -27,4 +27,4 @@ async function updateIncident(req, res) {
     });
 }
 
-export { createNewIncident };
+export { createNewIncident, updateIncident };
