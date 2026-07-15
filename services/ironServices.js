@@ -9,4 +9,17 @@ function extractNewBody(body) {
     };
 }
 
-export { extractNewBody };
+function extractUpdateBody(body) {
+    const { id, ...cleanBody } = body;
+    const columns = Object.keys(cleanBody)
+        .map((key) => `${key}=?`)
+        .join(", ");
+    const values = Object.values(cleanBody);
+    return {
+        columns,
+        values,
+        id,
+    };
+}
+
+export { extractNewBody, extractUpdateBody };

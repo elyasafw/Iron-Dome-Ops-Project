@@ -11,8 +11,16 @@ function repository() {
         return newData;
     }
     async function updateData(tableName, data) {
+        const { columns, values, id } = data;
+        const query = `
+        UPDATE ${tableName}
+        SET ${columns}
+        WHERE id=?
+        `;
+        const updateData = await pool.execute(query, [...values, id]);
+        return updateData.affectedRows;
     }
-    return { createNew };
+    return { createNew, updateData };
 }
 
 const ironRepo = repository();
