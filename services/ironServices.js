@@ -1,4 +1,4 @@
-function extractBody(body) {
+function extractNewBody(body) {
     const columns = Object.keys(body).join(", ");
     const values = Object.values(body);
     const placeholders = Array(values.length).fill("?").join(", ");
@@ -9,4 +9,4 @@ function extractBody(body) {
     };
 }
 
-export default extractBody;
+export { extractNewBody };

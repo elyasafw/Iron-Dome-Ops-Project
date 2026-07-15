@@ -1,12 +1,20 @@
 import ironRepo from "../repositories/baseRepository";
-import extractBody from "../services/ironServices";
+import { extractNewBody } from "../services/ironServices";
+import { validateNewOperator } from "../utils/validations";
 
 const TABLE = "operators";
 
 async function createNewOperator(req, res) {
-    const queryParameters = extractBody(req.body);
-    const newData = ironRepo(TABLE, queryParameters);
-    res.status(201).json({ success: true, data: newData });
+    if (!validateNewOperator(req.body)) {
+        const error = new Error(
+            `The body of the request must contain the fields: name | rank`,
+        );
+        error.status = 400;
+        throw error;
+    }
+    const queryParameters = extractNewBody(req.body);
+    const newOperator = ironRepo.createNew(TABLE, queryParameters);
+    res.status(201).json({ success: true, data: newOperator });
 }
 
-export default createNewOperator;
+export { createNewOperator };
