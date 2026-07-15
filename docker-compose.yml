@@ -1,0 +1,16 @@
+services:
+  mysql:
+    image: mysql:9
+    container_name: iron-dome-db
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: iron_dome
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./database.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  mysql-data:
