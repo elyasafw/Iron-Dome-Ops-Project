@@ -6,9 +6,7 @@ const operatorsRouter = express.Router();
 operatorsRouter.post("/", async (req, res) => {
     try {
         await createNewOperator(req, res);
-    } catch (err) {
-        const error = new Error(err.message);
-        error.status = 500;
+    } catch (error) {
         throw error;
     }
 });
