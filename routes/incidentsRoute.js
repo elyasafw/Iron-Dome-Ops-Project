@@ -1,11 +1,12 @@
 import express from "express";
 import { createNewIncident } from "../controllers/incidentsController";
+import { validateStatus } from "../middleware/middlewares";
 
 const incidentsRouter = express.Router();
 
-incidentsRouter.post("/", (req, res) => {
+incidentsRouter.post("/", async (req, res) => {
     try {
-        createNewIncident(req, res);
+        await createNewIncident(req, res);
     } catch (err) {
         const error = new Error(err.message);
         error.status = 500;

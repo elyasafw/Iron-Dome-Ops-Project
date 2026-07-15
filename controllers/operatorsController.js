@@ -13,7 +13,7 @@ async function createNewOperator(req, res) {
         throw error;
     }
     const queryParameters = extractNewBody(req.body);
-    const newOperator = ironRepo.createNew(TABLE, queryParameters);
+    const newOperator = await ironRepo.createNew(TABLE, queryParameters);
     res.status(201).json({ success: true, data: newOperator });
 }
 

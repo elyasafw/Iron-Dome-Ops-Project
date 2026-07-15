@@ -3,9 +3,9 @@ import createNewOperator from "../controllers/operatorsController";
 
 const operatorsRouter = express.Router();
 
-operatorsRouter.post("/", (req, res) => {
+operatorsRouter.post("/", async (req, res) => {
     try {
-        createNewOperator(req, res);
+        await createNewOperator(req, res);
     } catch (err) {
         const error = new Error(err.message);
         error.status = 500;
