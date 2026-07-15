@@ -8,3 +8,5 @@ function extractBody(body) {
         placeholders,
     };
 }
+
+export default extractBody;
