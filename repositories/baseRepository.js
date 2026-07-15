@@ -10,6 +10,8 @@ function repository() {
         const [newData] = await pool.execute(query, values);
         return newData;
     }
+    async function updateData(tableName, data) {
+    }
     return { createNew };
 }
 

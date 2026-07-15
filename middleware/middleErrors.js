@@ -1,5 +1,8 @@
 async function errors(err, req, res, next) {
-    res.status(err.status || 500).json(err.message || "Internal server error");
+    res.status(err.status || 500).json({
+        success: false,
+        message: err.message || "Internal server error",
+    });
 }
 
 export default errors;

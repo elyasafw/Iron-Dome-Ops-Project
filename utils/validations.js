@@ -3,4 +3,9 @@ function validateNewOperator(body) {
     return Object.keys(body).every((key) => KEYS.includes(key));
 }
 
-export default validateNewOperator;
+function validateNewIncident(body) {
+    const KEYS = ["codeName", "threatLevel", "operatorId"];
+    return Object.keys(body).every((key) => KEYS.includes(key));
+}
+
+export { validateNewIncident, validateNewOperator };
