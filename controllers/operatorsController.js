@@ -6,13 +6,13 @@ const TABLE = "operators";
 
 async function createNewOperator(req, res) {
     if (!validateNewOperator(req.body)) {
-        return res.status(400).join({
+        return res.status(400).json({
             success: false,
             message: `The body of the request must contain the fields: name, rank.`,
         });
     }
     const queryParameters = extractBody(req.body);
-    const newData = ironRepo(TABLE, queryParameters);
+    const newData = ironRepo.createNew(TABLE, queryParameters);
     res.status(201).json({ success: true, data: newData });
 }
 
