@@ -1,4 +1,4 @@
-async function errors(err, req, res, next) {
+async function middleErrors(err, req, res, next) {
     let statusCode = err.status || 500;
     let message = err.message || "Internal server error";
     if (err.errno) {
@@ -38,4 +38,4 @@ async function errors(err, req, res, next) {
     });
 }
 
-export default errors;
+export default middleErrors;

@@ -1,15 +1,40 @@
-function validateStatus(req, res, next) {
-    const allowedStatuses = ["OPEN", "TRACKING", "INTERCEPTED", "CLOSED"];
-    const currentStatus = req.body.status;
+import z from "zod";
 
-    if (!allowedStatuses.includes(currentStatus)) {
-        const error = new Error(
-            `The value '${currentStatus}' is invalid. Allowed values: ${allowedStatuses.join(" | ")}`,
-        );
-        error.status = 400;
-        throw error;
-    }
-    next();
-}
+const newOperatorSchema = z.object({
+    name: z.string(),
+    rank: z.string(),
+});
+
+const newIncdentSchema = z.object({
+    code_name: z.string(),
+    threat_level: z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL"]),
+    operator_id: z.number().int(),
+}).strict();
+
+const updateIncidentSchema = z.object({
+    status: z.enum(["OPEN", "TRACKING", "INTERCEPTED", "CLOSED"]),
+});
 
 export { validateStatus };
+
+async function middleValidation(schema) {
+    return (req, res, next) => {
+        const result = schema.safeParse(req.body);
+        if (!result.success) {
+            const error = new Error(
+                `Validation Error: ${result.error.errors[0].message}`,
+            );
+            error.status = 400;
+            throw error;
+        }
+        req.body = result.data;
+        next();
+    };
+}
+
+export {
+    middleValidation,
+    newIncdentSchema,
+    newOperatorSchema,
+    updateIncidentSchema,
+};

@@ -3,26 +3,38 @@ import {
     createNewIncident,
     updateIncident,
 } from "../controllers/incidentsController";
-import { validateStatus } from "../middleware/middlewares";
+import {
+    middleValidation,
+    newIncdentSchema,
+    updateIncidentSchema,
+} from "../middleware/middlewares";
 
 const incidentsRouter = express.Router();
 
-incidentsRouter.post("/", async (req, res) => {
-    try {
-        await createNewIncident(req, res);
-    } catch (err) {
-        const error = new Error(err.message);
-        error.status = 500;
-        throw error;
-    }
-});
+incidentsRouter.post(
+    "/",
+    middleValidation(newIncdentSchema),
+    async (req, res) => {
+        try {
+            await createNewIncident(req, res);
+        } catch (err) {
+            const error = new Error(err.message);
+            error.status = 500;
+            throw error;
+        }
+    },
+);
 
-incidentsRouter.patch("/:id/status", validateStatus, async (req, res) => {
-    try {
-        await updateIncident(req, res);
-    } catch (error) {
-        throw error
-    }
-});
+incidentsRouter.patch(
+    "/:id/status",
+    middleValidation(updateIncidentSchema),
+    async (req, res) => {
+        try {
+            await updateIncident(req, res);
+        } catch (error) {
+            throw error;
+        }
+    },
+);
 
 export default incidentsRouter;
