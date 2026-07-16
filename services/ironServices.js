@@ -22,4 +22,11 @@ function extractUpdateBody(body) {
     };
 }
 
-export { extractNewBody, extractUpdateBody };
+function querySelectIncidents() {
+    const query = `
+        SELECT * FROM incidents
+        WHERE status=OPEN`;
+    return query;
+}
+
+export { extractNewBody, extractUpdateBody, querySelectIncidents };
