@@ -1,5 +1,9 @@
 import ironRepo from "../repositories/baseRepository";
-import { extractNewBody, extractUpdateBody } from "../services/ironServices";
+import {
+    extractNewBody,
+    extractUpdateBody,
+    querySelectIncidents,
+} from "../services/ironServices";
 import { validateNewIncident } from "../utils/validations";
 
 const TABLE = "incdents";
@@ -27,4 +31,10 @@ async function updateIncident(req, res) {
     });
 }
 
-export { createNewIncident, updateIncident };
+async function getOpenIncidents(req, res) {
+    const query = querySelectIncidents();
+    const allOpenIncidents = await ironRepo.getFromTable(query);
+    res.status(200).json({ success: true, data: allOpenIncidents });
+}
+
+export { createNewIncident, getOpenIncidents, updateIncident };

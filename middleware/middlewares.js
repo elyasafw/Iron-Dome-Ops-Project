@@ -1,21 +1,25 @@
 import z from "zod";
 
-const newOperatorSchema = z.object({
-    name: z.string(),
-    rank: z.string(),
-});
+const newOperatorSchema = z
+    .object({
+        name: z.string(),
+        rank: z.string(),
+    })
+    .strict();
 
-const newIncdentSchema = z.object({
-    code_name: z.string(),
-    threat_level: z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL"]),
-    operator_id: z.number().int(),
-}).strict();
+const newIncdentSchema = z
+    .object({
+        code_name: z.string(),
+        threat_level: z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL"]),
+        operator_id: z.number().int(),
+    })
+    .strict();
 
-const updateIncidentSchema = z.object({
-    status: z.enum(["OPEN", "TRACKING", "INTERCEPTED", "CLOSED"]),
-});
-
-export { validateStatus };
+const updateIncidentSchema = z
+    .object({
+        status: z.enum(["OPEN", "TRACKING", "INTERCEPTED", "CLOSED"]),
+    })
+    .strict();
 
 async function middleValidation(schema) {
     return (req, res, next) => {
