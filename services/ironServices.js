@@ -22,11 +22,28 @@ function extractUpdateBody(req) {
     };
 }
 
-function querySelectIncidents() {
-    const query = `
-        SELECT * FROM incidents
-        WHERE status="OPEN"`;
-    return query;
+function extractFilters(filters) {
+    const filter = filters
+        ? Object.keys(filters)
+              .map((key) => `${key}=?`)
+              .join(" AND ")
+        : undefined;
+    const values = Object.values(filters);
+    const queryFilter = filters ? `WHERE ${filter}` : undefined;
+    return {
+        values,
+        queryFilter,
+    };
 }
 
-export { extractNewBody, extractUpdateBody, querySelectIncidents };
+function buildNewLog(details) {
+    const { incident_id, operator_id } = details;
+    return {
+        action: "INCIDENT_CREATED",
+        incident_id,
+        operator_id,
+        description: "New incident created",
+    };
+}
+
+export { buildNewLog, extractFilters, extractNewBody, extractUpdateBody };

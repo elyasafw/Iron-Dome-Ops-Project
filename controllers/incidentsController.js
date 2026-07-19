@@ -1,8 +1,8 @@
 import ironRepo from "../repositories/baseRepository.js";
 import {
+    extractFilters,
     extractNewBody,
     extractUpdateBody,
-    querySelectIncidents,
 } from "../services/ironServices.js";
 
 const TABLE = "incidents";
@@ -15,6 +15,7 @@ async function createNewIncident(req, res) {
         success: true,
         data: `New incident created successfully, ID: ${newIncident.insertId}`,
     });
+    return newIncident.insertId;
 }
 
 async function updateIncident(req, res) {
@@ -27,8 +28,8 @@ async function updateIncident(req, res) {
 }
 
 async function getOpenIncidents(req, res) {
-    const query = querySelectIncidents();
-    const allOpenIncidents = await ironRepo.getFromTable(query);
+    const query = extractFilters({ status: "OPEN" });
+    const allOpenIncidents = await ironRepo.getFromTable(TABLE, query);
     res.status(200).json({ success: true, data: allOpenIncidents });
 }
 

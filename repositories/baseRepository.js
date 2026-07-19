@@ -20,8 +20,12 @@ function repository() {
         const updateData = await pool.execute(query, [...values, id]);
         return updateData.affectedRows;
     }
-    async function getFromTable(query) {
-        const [data] = await pool.execute(query);
+    async function selectFromTable(tableName, filter) {
+        const { values, queryFilter };
+        const query = `
+        SELECT * FROM ${tableName} WHERE ${queryFilter}
+        `;
+        const [data] = await pool.execute(query, values);
         return data;
     }
     return { createNew, updateData, getFromTable };

@@ -9,6 +9,7 @@ import {
     newIncidentSchema,
     updateIncidentSchema,
 } from "../middleware/middlewares.js";
+import { createNewLog } from "../controllers/logsController.js";
 
 const incidentsRouter = express.Router();
 
@@ -17,7 +18,8 @@ incidentsRouter.post(
     middleValidation(newIncidentSchema),
     async (req, res) => {
         try {
-            await createNewIncident(req, res);
+           const newId =  await createNewIncident(req, res);
+           await createNewLog(req, res, newId)
         } catch (err) {
             const error = new Error(err.message);
             error.status = 500;
