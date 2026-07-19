@@ -9,16 +9,15 @@ function extractNewBody(body) {
     };
 }
 
-function extractUpdateBody(req) {
-    const id = req.params.id;
-    const columns = Object.keys(req.body)
+function extractUpdateBody(bodyData, idFromParams) {
+    const columns = Object.keys(bodyData)
         .map((key) => `${key}=?`)
         .join(", ");
-    const values = Object.values(req.body);
+    const values = Object.values(bodyData);
     return {
         columns,
         values,
-        id,
+        id: Number(idFromParams),
     };
 }
 
@@ -36,14 +35,20 @@ function extractFilters(filters) {
     };
 }
 
-function buildNewLog(details) {
-    const { incident_id, operator_id } = details;
+function buildUpdateLog(details) {
+    const { incident_id, operator_id, status } = details;
     return {
-        action: "INCIDENT_CREATED",
+        action: "STATUS_UPDATE",
         incident_id,
         operator_id,
-        description: "New incident created",
+        description: `Status changed to ${status}`,
     };
 }
 
-export { buildNewLog, extractFilters, extractNewBody, extractUpdateBody };
+export {
+    buildUpdateLog,
+    extractFilters,
+    extractNewBody,
+    extractUpdateBody
+};
+

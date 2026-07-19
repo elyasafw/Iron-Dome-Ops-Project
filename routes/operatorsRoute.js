@@ -12,7 +12,11 @@ operatorsRouter.post(
     middleValidation(newOperatorSchema),
     async (req, res) => {
         try {
-            await createNewOperator(req, res);
+            const operator = await createNewOperator(req, res);
+            res.status(201).json({
+                success: true,
+                message: `New operator created successfully, ID: ${Operator.insertId}`,
+            });
         } catch (error) {
             throw error;
         }

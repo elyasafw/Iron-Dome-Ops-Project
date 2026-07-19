@@ -17,18 +17,17 @@ function repository() {
             SET ${columns}
             WHERE id=?
             `;
-        const updateData = await pool.execute(query, [...values, id]);
-        return updateData.affectedRows;
+        const [updateData] = await pool.execute(query, [...values, id]);
     }
     async function selectFromTable(tableName, filter) {
-        const { values, queryFilter };
+        const { values, queryFilter } = filter;
         const query = `
-        SELECT * FROM ${tableName} WHERE ${queryFilter}
+        SELECT * FROM ${tableName} ${queryFilter}
         `;
         const [data] = await pool.execute(query, values);
         return data;
     }
-    return { createNew, updateData, getFromTable };
+    return { createNew, updateData, selectFromTable };
 }
 
 const ironRepo = repository();

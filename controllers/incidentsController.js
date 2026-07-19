@@ -11,26 +11,31 @@ async function createNewIncident(req, res) {
     req.body.status = "OPEN";
     const queryParameters = extractNewBody(req.body);
     const newIncident = await ironRepo.createNew(TABLE, queryParameters);
-    res.status(201).json({
-        success: true,
-        data: `New incident created successfully, ID: ${newIncident.insertId}`,
-    });
-    return newIncident.insertId;
+    return {
+        action: "INCIDENT_CREATED",
+        incident_id: newIncident.insertId,
+        operator_id: req.body.operator_id,
+        description: "New incident created",
+    };
 }
 
 async function updateIncident(req, res) {
-    const queryParameters = extractUpdateBody(req);
-    const updateIncident = await ironRepo.updateData(TABLE, queryParameters);
-    res.status(200).json({
-        success: true,
-        message: `Updated ${tableName} successfully. Rows affected: ${updateIncident}`,
-    });
+    const queryParameters = extractUpdateBody(req.body, req.params.id);
+    await ironRepo.updateData(TABLE, queryParameters);
+    const queryFilter = extractFilters(req.params);
+    const details = await ironRepo.selectFromTable(TABLE, queryFilter);
+    return {
+        action: "STATUS_UPDATE",
+        incident_id: details[0].id,
+        operator_id: details[0].operator_id,
+        description: `Status changed to ${details[0].status}`,
+    };
 }
 
 async function getOpenIncidents(req, res) {
     const query = extractFilters({ status: "OPEN" });
-    const allOpenIncidents = await ironRepo.getFromTable(TABLE, query);
-    res.status(200).json({ success: true, data: allOpenIncidents });
+    const allOpenIncidents = await ironRepo.selectFromTable(TABLE, query);
+    return allOpenIncidents;
 }
 
 export { createNewIncident, getOpenIncidents, updateIncident };
