@@ -25,11 +25,7 @@ function middleValidation(schema) {
     return (req, res, next) => {
         const result = schema.safeParse(req.body);
         if (!result.success) {
-            const firstErrorMessage =
-                result.error.issues[0]?.message || "Invalid data structure";
-            const error = new Error(`Validation Error: ${firstErrorMessage}`);
-            error.status = 400;
-            throw error;
+            throw result.error;
         }
         req.body = result.data;
         next();

@@ -6,7 +6,11 @@ async function middleErrors(err, req, res, next) {
     if (err instanceof ZodError) {
         statusCode = 400;
         const firstIssue = err.issues[0];
-        const fieldName = firstIssue?.path.join("."); 
+        let fieldName = firstIssue?.path.join(".");
+        if (!fieldName && firstIssue?.keys) {
+            fieldName = firstIssue.keys.join(".");
+        }
+        if (!fieldName) fieldName = "input";
         message = `Validation Error: [${fieldName}] - ${firstIssue?.message}`;
     }
     if (err.errno) {
