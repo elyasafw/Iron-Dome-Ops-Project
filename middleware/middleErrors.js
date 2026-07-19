@@ -1,6 +1,14 @@
+import { ZodError } from "zod";
+
 async function middleErrors(err, req, res, next) {
     let statusCode = err.status || 500;
     let message = err.message || "Internal server error";
+    if (err instanceof ZodError) {
+        statusCode = 400;
+        const firstIssue = err.issues[0];
+        const fieldName = firstIssue?.path.join("."); 
+        message = `Validation Error: [${fieldName}] - ${firstIssue?.message}`;
+    }
     if (err.errno) {
         switch (err.errno) {
             case 1062:

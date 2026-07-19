@@ -3,11 +3,11 @@ import z from "zod";
 const newOperatorSchema = z
     .object({
         name: z.string(),
-        rank: z.string(),
+        role: z.string(),
     })
     .strict();
 
-const newIncdentSchema = z
+const newIncidentSchema = z
     .object({
         code_name: z.string(),
         threat_level: z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL"]),
@@ -21,13 +21,13 @@ const updateIncidentSchema = z
     })
     .strict();
 
-async function middleValidation(schema) {
+function middleValidation(schema) {
     return (req, res, next) => {
         const result = schema.safeParse(req.body);
         if (!result.success) {
-            const error = new Error(
-                `Validation Error: ${result.error.errors[0].message}`,
-            );
+            const firstErrorMessage =
+                result.error.issues[0]?.message || "Invalid data structure";
+            const error = new Error(`Validation Error: ${firstErrorMessage}`);
             error.status = 400;
             throw error;
         }
@@ -38,7 +38,7 @@ async function middleValidation(schema) {
 
 export {
     middleValidation,
-    newIncdentSchema,
+    newIncidentSchema,
     newOperatorSchema,
     updateIncidentSchema,
 };

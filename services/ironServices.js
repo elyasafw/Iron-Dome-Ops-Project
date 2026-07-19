@@ -25,7 +25,7 @@ function extractUpdateBody(body) {
 function querySelectIncidents() {
     const query = `
         SELECT * FROM incidents
-        WHERE status=OPEN`;
+        WHERE status="OPEN"`;
     return query;
 }
 
