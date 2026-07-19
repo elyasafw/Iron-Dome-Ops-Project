@@ -21,8 +21,13 @@ const updateIncidentSchema = z
     })
     .strict();
 
-function middleValidation(schema) {
+function middleValidation(schema, id) {
     return (req, res, next) => {
+        if (id !== undefined && isNaN(Number(id))) {
+            const error = new Error("The ID must be a valid number");
+            error.status = 400;
+            throw error;
+        }
         const result = schema.safeParse(req.body);
         if (!result.success) {
             throw result.error;

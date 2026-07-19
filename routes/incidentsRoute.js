@@ -28,7 +28,7 @@ incidentsRouter.post(
 
 incidentsRouter.patch(
     "/:id/status",
-    middleValidation(updateIncidentSchema),
+    middleValidation(updateIncidentSchema, req.params.id),
     async (req, res) => {
         try {
             await updateIncident(req, res);

@@ -9,12 +9,12 @@ function extractNewBody(body) {
     };
 }
 
-function extractUpdateBody(body) {
-    const { id, ...cleanBody } = body;
-    const columns = Object.keys(cleanBody)
+function extractUpdateBody(req) {
+    const id = req.params.id;
+    const columns = Object.keys(req.body)
         .map((key) => `${key}=?`)
         .join(", ");
-    const values = Object.values(cleanBody);
+    const values = Object.values(req.body);
     return {
         columns,
         values,
