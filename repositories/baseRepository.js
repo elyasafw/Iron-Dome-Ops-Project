@@ -1,8 +1,8 @@
-import pool from "../db/database";
+import pool from "../db/database.js";
 
 function repository() {
-    async function createNew(tableName, Data) {
-        const { columns, values, placeholders } = newData;
+    async function createNew(tableName, data) {
+        const { columns, values, placeholders } = data;
         const query = `
             INSERT INTO ${tableName} (${columns})
             VALUES (${placeholders})

@@ -3,7 +3,7 @@ USE iron_dome;
 CREATE TABLE IF NOT EXISTS operators (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100),
-    `rank` VARCHAR(100)
+    role VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS incidents (

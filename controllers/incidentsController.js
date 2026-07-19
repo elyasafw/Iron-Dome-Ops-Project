@@ -1,21 +1,13 @@
-import ironRepo from "../repositories/baseRepository";
+import ironRepo from "../repositories/baseRepository.js";
 import {
     extractNewBody,
     extractUpdateBody,
     querySelectIncidents,
-} from "../services/ironServices";
-import { validateNewIncident } from "../utils/validations";
+} from "../services/ironServices.js";
 
-const TABLE = "incdents";
+const TABLE = "incidents";
 
 async function createNewIncident(req, res) {
-    if (!validateNewIncident(req.body)) {
-        const error = new Error(
-            `The body of the request must contain the fields: codeName | threatLevel | operatorId`,
-        );
-        error.status = 400;
-        throw error;
-    }
     req.body.status = "OPEN";
     const queryParameters = extractNewBody(req.body);
     const newIncident = await ironRepo.createNew(TABLE, queryParameters);

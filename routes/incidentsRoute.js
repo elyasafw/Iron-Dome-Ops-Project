@@ -1,19 +1,20 @@
 import express from "express";
 import {
     createNewIncident,
+    getOpenIncidents,
     updateIncident,
-} from "../controllers/incidentsController";
+} from "../controllers/incidentsController.js";
 import {
     middleValidation,
-    newIncdentSchema,
+    newIncidentSchema,
     updateIncidentSchema,
-} from "../middleware/middlewares";
+} from "../middleware/middlewares.js";
 
 const incidentsRouter = express.Router();
 
 incidentsRouter.post(
     "/",
-    middleValidation(newIncdentSchema),
+    middleValidation(newIncidentSchema),
     async (req, res) => {
         try {
             await createNewIncident(req, res);
@@ -36,5 +37,13 @@ incidentsRouter.patch(
         }
     },
 );
+
+incidentsRouter.get("/open", async (req, res) => {
+    try {
+        await getOpenIncidents(req, res);
+    } catch (error) {
+        throw error;
+    }
+});
 
 export default incidentsRouter;
