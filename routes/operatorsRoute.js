@@ -15,7 +15,7 @@ operatorsRouter.post(
             const operator = await createNewOperator(req, res);
             res.status(201).json({
                 success: true,
-                message: `New operator created successfully, ID: ${Operator.insertId}`,
+                message: `New operator created successfully, ID: ${operator.insertId}`,
             });
         } catch (error) {
             throw error;

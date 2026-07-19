@@ -4,8 +4,7 @@ const newOperatorSchema = z
     .object({
         name: z.string(),
         role: z.string(),
-    })
-    .strict();
+    });
 
 const newIncidentSchema = z
     .object({
@@ -24,8 +23,7 @@ const newIncidentSchema = z
             "Invalid threat level. Use: LOW | MEDIUM | HIGH | CRITICAL",
         ),
         operator_id: z.number().int(),
-    })
-    .strict();
+    });
 
 const updateIncidentSchema = z
     .object({
@@ -33,8 +31,7 @@ const updateIncidentSchema = z
             ["OPEN", "TRACKING", "INTERCEPTED", "CLOSED"],
             "Invalid status option. Allowed values: OPEN | TRACKING | INTERCEPTED | CLOSED",
         ),
-    })
-    .strict();
+    });
 
 function middleValidation(schema) {
     return (req, res, next) => {

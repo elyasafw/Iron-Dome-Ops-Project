@@ -24,9 +24,7 @@ incidentsRouter.post(
                 success: true,
                 data: `New incident created successfully, ID: ${newIncident.incident_id}`,
             });
-        } catch (err) {
-            const error = new Error(err.message);
-            error.status = 500;
+        } catch (error) {
             throw error;
         }
     },
