@@ -9,15 +9,30 @@ const newOperatorSchema = z
 
 const newIncidentSchema = z
     .object({
-        code_name: z.string(),
-        threat_level: z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL"]),
+        code_name: z.enum(
+            [
+                "RED SKY",
+                "BLACK FALCON",
+                "IRON SHIELD",
+                "NIGHT ARROW",
+                "SILENT DOME",
+            ],
+            "Invalid code name. Choose a valid code name.",
+        ),
+        threat_level: z.enum(
+            ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+            "Invalid threat level. Use: LOW | MEDIUM | HIGH | CRITICAL",
+        ),
         operator_id: z.number().int(),
     })
     .strict();
 
 const updateIncidentSchema = z
     .object({
-        status: z.enum(["OPEN", "TRACKING", "INTERCEPTED", "CLOSED"]),
+        status: z.enum(
+            ["OPEN", "TRACKING", "INTERCEPTED", "CLOSED"],
+            "Invalid status option. Allowed values: OPEN | TRACKING | INTERCEPTED | CLOSED",
+        ),
     })
     .strict();
 
