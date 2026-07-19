@@ -9,24 +9,46 @@ function extractNewBody(body) {
     };
 }
 
-function extractUpdateBody(body) {
-    const { id, ...cleanBody } = body;
-    const columns = Object.keys(cleanBody)
+function extractUpdateBody(bodyData, idFromParams) {
+    const columns = Object.keys(bodyData)
         .map((key) => `${key}=?`)
         .join(", ");
-    const values = Object.values(cleanBody);
+    const values = Object.values(bodyData);
     return {
         columns,
         values,
-        id,
+        id: Number(idFromParams),
     };
 }
 
-function querySelectIncidents() {
-    const query = `
-        SELECT * FROM incidents
-        WHERE status="OPEN"`;
-    return query;
+function extractFilters(filters) {
+    const filter = filters
+        ? Object.keys(filters)
+              .map((key) => `${key}=?`)
+              .join(" AND ")
+        : undefined;
+    const values = Object.values(filters);
+    const queryFilter = filters ? `WHERE ${filter}` : undefined;
+    return {
+        values,
+        queryFilter,
+    };
 }
 
-export { extractNewBody, extractUpdateBody, querySelectIncidents };
+function buildUpdateLog(details) {
+    const { incident_id, operator_id, status } = details;
+    return {
+        action: "STATUS_UPDATE",
+        incident_id,
+        operator_id,
+        description: `Status changed to ${status}`,
+    };
+}
+
+export {
+    buildUpdateLog,
+    extractFilters,
+    extractNewBody,
+    extractUpdateBody
+};
+

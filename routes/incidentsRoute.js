@@ -4,6 +4,7 @@ import {
     getOpenIncidents,
     updateIncident,
 } from "../controllers/incidentsController.js";
+import { createNewLog } from "../controllers/logsController.js";
 import {
     middleValidation,
     newIncidentSchema,
@@ -17,7 +18,12 @@ incidentsRouter.post(
     middleValidation(newIncidentSchema),
     async (req, res) => {
         try {
-            await createNewIncident(req, res);
+            const newIncident = await createNewIncident(req, res);
+            await createNewLog(req, res, newIncident);
+            res.status(201).json({
+                success: true,
+                data: `New incident created successfully, ID: ${newIncident.incident_id}`,
+            });
         } catch (err) {
             const error = new Error(err.message);
             error.status = 500;
@@ -31,7 +37,12 @@ incidentsRouter.patch(
     middleValidation(updateIncidentSchema),
     async (req, res) => {
         try {
-            await updateIncident(req, res);
+            const updated = await updateIncident(req, res);
+            await createNewLog(req, res, updated);
+            res.status(200).json({
+                success: true,
+                message: `Updated incident ID: ${req.params.id} successfully`,
+            });
         } catch (error) {
             throw error;
         }
@@ -40,7 +51,8 @@ incidentsRouter.patch(
 
 incidentsRouter.get("/open", async (req, res) => {
     try {
-        await getOpenIncidents(req, res);
+        const opensIncidents = await getOpenIncidents(req, res);
+        res.status(200).json({ success: true, data: opensIncidents });
     } catch (error) {
         throw error;
     }
